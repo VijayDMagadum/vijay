@@ -1,0 +1,74 @@
+<!doctype html>
+	<head>
+        <link rel="stylesheet" href="sss.css">
+		<title>Speech to text Text to speech</title>
+	</head>
+	<body>
+	    <h2>JavaScript Text to Speech</h2>
+		<div><input type="text" id="speak" placeholder="Enter text to speak..."/></div>
+        <div><button type="button" onclick="textToAudio()">Speak</button></div>
+		
+        <br/>
+        <div><small><b>NOTE:</b> Enter text and click on speak button.</small></div>
+        <h2>JavaScript Speech to Text</h2>
+        <p>Click on the below button and speak something...</p>
+        <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
+        <div id="output" class="hide"></div>
+		
+		<script>
+			
+				
+			
+			
+            function textToAudio() {
+                let msg = document.getElementById("speak").value;
+                
+                let speech = new SpeechSynthesisUtterance();
+                speech.lang = "en-US";
+                
+                speech.text = msg;
+                speech.volume = 1;
+                speech.rate = 1;
+                speech.pitch = 1;
+                
+                window.speechSynthesis.speak(speech);
+				
+				
+            }
+            function runSpeechRecognition() {
+		        
+				
+		        var output = document.getElementById("output");
+		        
+		        var action = document.getElementById("action");
+                
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+            
+                
+                recognition.onstart = function() {
+                    action.innerHTML = "<small>listening, please speak...</small>";
+                };
+                
+                recognition.onspeechend = function() {
+                    action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+                    recognition.stop();
+                }
+              
+                
+                recognition.onresult = function(event) {
+                    var transcript = event.results[0][0].transcript;
+					
+                    var confidence = event.results[0][0].confidence;
+                    output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence*100+"%";
+                    output.classList.remove("hide");
+					
+					
+                };
+              
+                 
+                 recognition.start();
+	        }
+		</script>
+	</body>
+</html>
